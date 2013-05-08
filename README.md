@@ -1,7 +1,7 @@
 Setchbook
 ==========
 
-REPOSITORY for processing projects
+**REPOSITORY FOR PROCESSING PROJECTS**
 
 ---
 
