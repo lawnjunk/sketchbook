@@ -12,31 +12,21 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class lineNoise extends PApplet {
-
-	int step = 50;
+public class lineNoise2 extends PApplet {
+  public void setup() {
+	size(1000, 200);
+	int step = 15;
 	float lastX =-999;
 	float lastY =-999;
 	float y = height/2;
 	int borderX = 20;
 	int borderY;
 	int x = borderX;
-
-
-public void setup(){
 	
-	size(1000, 200);
-	smooth();
-	frameRate(10);
-	borderY= 90;
-
-}
-
-public void draw(){
-	background(222, 222, 222);
-		strokeWeight(5);
+	strokeWeight(5);
+	stroke(0, 30);
 	for(x= borderX; x<=width-borderX; x+= step){
-		y +=  random(2,-2);
+		y = 20 + (noise(random(10))*20);
 
 		
 		if (lastX>-999){
@@ -47,21 +37,11 @@ public void draw(){
 		lastY = y;
 		
 	}
-		if (x>=width-borderX){
-			x = borderX + 3;
-			lastY = -999;
-			lastX = -999;
-		}
-
-}
-
-
-
-
-
+    noLoop();
+  }
 
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "lineNoise" };
+    String[] appletArgs = new String[] { "lineNoise2" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
