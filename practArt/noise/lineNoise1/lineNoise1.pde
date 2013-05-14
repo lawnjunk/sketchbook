@@ -16,7 +16,7 @@ int create = 0;
 
 void setup(){
 	size(displayWidth, displayHeight,OPENGL);
-	frameRate(30);
+	frameRate(20);
 	smooth();
 	strokeCap(PROJECT);
 
@@ -24,7 +24,7 @@ void setup(){
 		//new noiseyline(start, end, y, tall, steps)
 		noisescolors[i] =  color((int)random(100)+100);
 		// noises[i] = new NoiseyLine(width - 2*(int)random(width),width +100, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
-		noises[i] = new NoiseyLine((int)random(width) - 400,width, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
+		noises[i] = new NoiseyLine((int)random(width) - 400,width, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(2,17));
 	
 	}
 
@@ -75,7 +75,7 @@ void draw(){
 		noises[(int)random(noises.length)].drawNoiseyLine();
 	}
 
-	tint(10, 100);
+	tint(50, 100);
 	create += addd;
 
 	if (create == 0){
