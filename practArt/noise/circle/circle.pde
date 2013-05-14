@@ -4,6 +4,7 @@ float lasty = -999;
 float angle = 1;
 float y = 50;
 int x = 0;
+int z = 0;
 
 void setup(){
 size(1000,1000);
@@ -14,7 +15,7 @@ stroke(0);
 }
 
 void draw(){
-	background(0);
+	background(50+(z%200))1;
 	stroke(44,170,200);
 	thatthing2(800,10,13,60);
 		if ( x >=width ){

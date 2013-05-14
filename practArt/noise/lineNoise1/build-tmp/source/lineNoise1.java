@@ -19,6 +19,7 @@ int[] noisescolors = new int[noises.length];
 int z = 0;
 int b = 0;
 int ha = 0;
+int add;
 
 public void setup(){
 	size(displayWidth, 300,OPENGL);
@@ -36,7 +37,15 @@ public void setup(){
 }
 
 public void draw(){
-	background(11);
+	background(z);
+
+	if(z ==0){
+		add = 1;
+	} else if (z == 255) {
+		add = -1;
+	}
+
+	z+= add;
 	
 	for(int i=0; i<noises.length; i++){
 		stroke(noisescolors[i]);
