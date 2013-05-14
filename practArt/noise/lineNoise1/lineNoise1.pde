@@ -1,48 +1,90 @@
-NoiseyLine [] noises = new NoiseyLine[1000];
+import processing.video.*;
+
+
+PImage back ;
+Movie bk;
+
+NoiseyLine [] noises = new NoiseyLine[100];
 color[] noisescolors = new color[noises.length];
 int z = 0;
 int b = 0;
 int ha = 0;
 int add;
+int addd;
+
+int create = 0;
 
 void setup(){
-	size(displayWidth, 300,OPENGL);
-	frameRate(10);
+	size(displayWidth, displayHeight,OPENGL);
+	frameRate(30);
 	smooth();
 	strokeCap(PROJECT);
 
 	for (int i=0; i<noises.length; i++){
 		//new noiseyline(start, end, y, tall, steps)
 		noisescolors[i] =  color((int)random(100)+100);
-		noises[i] = new NoiseyLine(width - 2*(int)random(width),width +100, (int)random(1,height),(int)random(1,20),(int)random(30,1));
+		// noises[i] = new NoiseyLine(width - 2*(int)random(width),width +100, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
+		noises[i] = new NoiseyLine((int)random(width) - 400,width, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
+	
 	}
 
+
+
+	bk = new Movie(this, "garbage.mov");
+	bk.loop();
+    bk.speed(0.5);
+	back = loadImage("background.jpg");
 	// NoiseyLine one = new NoiseyLine(50,800, height/2, 50, 10);
 }
 
+// Called every time a new frame is available to read
+void movieEvent(Movie m) {
+  m.read();
+}
+
+
 void draw(){
-	background(z);
+	// background(z);
+
+	bk.jump(random(bk.duration()));
+	image(back, 0, 0, width, height);
 
 	if(z ==0){
 		add = 1;
-	} else if (z == 255) {
+	} else if (z == 200) {
 		add = -1;
 	}
 
+	if(frameCount%5 == 0){	
 	z+= add;
+	}
 	
-	for(int i=0; i<noises.length; i++){
+	for(int i=0; i<create; i++){
 		stroke(noisescolors[i]);
-		strokeWeight(random(1,3));
+		strokeCap(ROUND);
+		strokeWeight(random(1,13));
 		noises[i].drawRunner();
 
 	}
 	for (int i = 0; i<10; i++){
+
 		strokeCap(ROUND);
-		strokeWeight(10);
-		stroke(0);
-		noises[i].drawNoiseyLine();
+		strokeWeight(6);
+		// stroke(255-z, 50+ z/4, 60 + Z/2);
+		stroke(0, 0, 0);
+		noises[(int)random(noises.length)].drawNoiseyLine();
 	}
+
+	tint(10, 100);
+	create += addd;
+
+	if (create == 0){
+		addd = 1;
+	} else if (create == noises.length) {
+		addd = -1;
+	}
+
+
 }
 
 class NoiseyLine{
@@ -81,9 +123,12 @@ class NoiseyLine{
 
 	void drawRunner(){
 
-		float y = vert + noise(random(-tall,tall))*30;
+		float y = vert + noise(random(-tall,tall))*random(1,30);
 		if(lastX> -999){
+
 			line(x, y, lastX, lastY);
+			noStroke();
+			// ellipse(x+random(-100, 100), y + random(-100, 100), 5, 5);
 		}
 		lastX = x;
 		lastY = y;
