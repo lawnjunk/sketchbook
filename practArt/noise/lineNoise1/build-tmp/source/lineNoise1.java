@@ -22,7 +22,7 @@ public class lineNoise1 extends PApplet {
 PImage back ;
 Movie bk;
 
-NoiseyLine [] noises = new NoiseyLine[100];
+NoiseyLine [] noises = new NoiseyLine[3000];
 int[] noisescolors = new int[noises.length];
 int z = 0;
 int b = 0;
@@ -30,19 +30,24 @@ int ha = 0;
 int add;
 int addd;
 
-int create = 0;
+int create = 10;
+
+public boolean sketchFullScreen() {
+  return true;
+}
 
 public void setup(){
-	size(displayWidth, displayHeight,OPENGL);
-	frameRate(20);
+	size(displayWidth, displayHeight);
+	frameRate(30);
 	smooth();
 	strokeCap(PROJECT);
+	noCursor();
 
 	for (int i=0; i<noises.length; i++){
 		//new noiseyline(start, end, y, tall, steps)
 		noisescolors[i] =  color((int)random(100)+100);
 		// noises[i] = new NoiseyLine(width - 2*(int)random(width),width +100, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
-		noises[i] = new NoiseyLine((int)random(width) - 400,width, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(2,17));
+		noises[i] = new NoiseyLine((int)random(width) - 400,width, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,40));
 	
 	}
 
@@ -65,7 +70,7 @@ public void draw(){
 	// background(z);
 
 	bk.jump(random(bk.duration()));
-	image(back, 0, 0, width, height);
+	image(bk, 0, 0, width, height);
 
 	if(z ==0){
 		add = 1;
@@ -77,26 +82,31 @@ public void draw(){
 	z+= add;
 	}
 	
-	for(int i=0; i<create; i++){
+	for(int i=0; i<noises.length; i++){
 		stroke(noisescolors[i]);
 		strokeCap(ROUND);
 		strokeWeight(random(1,13));
 		noises[i].drawRunner();
 
 	}
-	for (int i = 0; i<10; i++){
 
-		strokeCap(ROUND);
-		strokeWeight(6);
-		// stroke(255-z, 50+ z/4, 60 + Z/2);
-		stroke(0, 0, 0);
-		noises[(int)random(noises.length)].drawNoiseyLine();
+	// for (int i = 0; i<(noises.length/20); i++){
+
+	// 	strokeCap(ROUND);
+	// 	strokeWeight(5);
+	// 	// stroke(255-z, 50+ z/4, 60 + Z/2);
+	// 	stroke(0,30);
+	// 	noises[(int)random(noises.length)].drawNoiseyLine();
+	// }
+
+	filter(DILATE);
+	tint(100, 155);
+
+	if (frameCount% 10 == 0){
+		create += addd;
 	}
 
-	tint(50, 100);
-	create += addd;
-
-	if (create == 0){
+	if (create == 10){
 		addd = 1;
 	} else if (create == noises.length) {
 		addd = -1;
@@ -162,6 +172,8 @@ class NoiseyLine{
 
 	}
 }
+
+
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "lineNoise1" };
     if (passedArgs != null) {
