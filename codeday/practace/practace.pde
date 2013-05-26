@@ -1,74 +1,45 @@
-int r=0;
-int nr =0;
-float lastX = 0.0;
-float lastY = 0.0;
+// THIS IS THE MAZZZE PROGRAM
+//
+//
+
+
+int tileCount = 30;
 
 void setup(){
-	size(displayWidth, displayHeight);
-	smooth();
-	background(0);
-	translate(width/2, height/2);	
-	// frameRate(15);
-
+size(displayWidth, displayHeight);
+smooth();	
+frameRate(6);
+background(0);
 }
 
-boolean sketchFullScreen() {
-  return true;
+boolean sketchFullScreen(){
+	return true;
 }
 
 void draw(){
-	pushMatrix();
-	pushMatrix();
-	translate(width/2, height/2);
-	rotate(r%360);
-	r++;
+	background(0);
+	strokeCap(ROUND);
+	
+	tileCount = mouseX/100;
 
-	background(0);	
+	for (int gridY = 0; gridY<tileCount; gridY++){
+		for (int gridX = 0; gridX<tileCount; gridX++){
+			stroke(255);
+			int posX = width/tileCount*gridX;
+			int posY = width/tileCount*gridY;
+			int toggle = (int) random(0,2);
 
-	int circleResolution = (int) map(mouseY, 0, height, 2, 100);
-	float radius = mouseX + 0.5;
-	float angle = TWO_PI/circleResolution;
+			if(toggle == 0){
+				strokeWeight(30);
+				line(posX,posY,posX+height/tileCount,posY+height/tileCount);
+			} 
 
-	strokeWeight(mouseX/20);
+			if (toggle == 1){
+				strokeWeight(30);
+				line(posX,posY+width/tileCount,posX+width/tileCount,posY);
+			}
 
-	for (int i = 0; i<=circleResolution; i++){
-		noFill();
-		stroke(random(100, 255));
-		float x = cos(angle*i)*radius;
-		float y = sin(angle*i)*radius;
-		line(lastX,lastY,lastY,lastX);
-		lastX = y;
-		lastY = x;
 
-	}
-
-	popMatrix();
-	translate(width/2, height/2);
-	rotate(radians(300-(r%360)));
-
-	for (int i = 0; i<=circleResolution; i++){
-		noFill();
-		stroke(255);
-		float x = cos(angle*i)*radius;
-		float y = sin(angle*i)*radius;
-		line(0,0,lastY,lastX);
-		lastX = y;
-		lastY = x;
-
-	}
-	popMatrix();
-	translate(width/2, height/2);
-	rotate(radians(r%360));
-
-	for (int i = 0; i<=circleResolution; i++){
-		noFill();
-		stroke(255);
-		float x = cos(angle*i)*radius;
-		float y = sin(angle*i)*radius;
-		line(y,x,y,x);
-		lastX = y;
-		lastY = x;
-
-	}
-
+		}
+	}	
 }
