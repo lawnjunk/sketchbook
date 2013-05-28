@@ -4,7 +4,7 @@ import processing.video.*;
 PImage back ;
 Movie bk;
 
-NoiseyLine [] noises = new NoiseyLine[3000];
+NoiseyLine [] noises = new NoiseyLine[100];
 color[] noisescolors = new color[noises.length];
 int z = 0;
 int b = 0;
@@ -51,8 +51,8 @@ void movieEvent(Movie m) {
 void draw(){
 	// background(z);
 
-	bk.jump(random(bk.duration()));
-	image(bk, 0, 0, width, height);
+	// bk.jump(random(bk.duration()));
+	image(back, 0, 0, width, height);
 
 	if(z ==0){
 		add = 1;
@@ -60,7 +60,7 @@ void draw(){
 		add = -1;
 	}
 
-	if(frameCount%5 == 0){	
+	if(frameCount%3 == 0){	
 	z+= add;
 	}
 	

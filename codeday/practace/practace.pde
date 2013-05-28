@@ -1,45 +1,55 @@
-// THIS IS THE MAZZZE PROGRAM
-//
-//
-
-
-int tileCount = 30;
+PImage img;
+color [] colors;
 
 void setup(){
-size(displayWidth, displayHeight);
-smooth();	
-frameRate(6);
-background(0);
+	size(displayWidth,displayHeight);
+	smooth();
+	background(0);
+	img = loadImage("oldman.jpg");
+	noCursor();
 }
 
-boolean sketchFullScreen(){
-	return true;
+boolean sketchFullScreen() {
+  return true;
 }
 
 void draw(){
-	background(0);
-	strokeCap(ROUND);
-	
-	tileCount = mouseX/100;
+
+
+	image(img, 0, 0, width, height);
+	int tileCount = width/max(mouseX, 10);
+	float rectSize = width/(float)tileCount;
+
+	int i=0;
+	colors = new color[img.width*img.height];
+	for (int gridY = 0; gridY<img.height; gridY++){
+		for (int gridX = 0; gridX<img.width; gridX++){
+			int px = (int)random(gridX);
+			int py = (int)random(gridY);
+			colors[i] = img.get(px,py);
+			i++;
+		}
+	}
+
+	i = 0;
 
 	for (int gridY = 0; gridY<tileCount; gridY++){
 		for (int gridX = 0; gridX<tileCount; gridX++){
-			stroke(255);
-			int posX = width/tileCount*gridX;
-			int posY = width/tileCount*gridY;
-			int toggle = (int) random(0,2);
-
-			if(toggle == 0){
-				strokeWeight(30);
-				line(posX,posY,posX+height/tileCount,posY+height/tileCount);
-			} 
-
-			if (toggle == 1){
-				strokeWeight(30);
-				line(posX,posY+width/tileCount,posX+width/tileCount,posY);
-			}
-
+			fill(colors[i]);
+			rect(gridX*rectSize, gridY*rectSize, rectSize, rectSize);
+			i++;
 
 		}
-	}	
+	}
+
+	i=0;
+	for (int gridY = 0; gridY<tileCount; gridY++){
+		for (int gridX = 0; gridX<tileCount; gridX++){
+			fill(colors[i]);
+			rect(gridX*rectSize, gridY*rectSize, rectSize, rectSize);
+			i++;
+			rotate(random(i)%360);
+		}
+	}
+
 }
