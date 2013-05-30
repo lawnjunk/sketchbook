@@ -15,7 +15,7 @@ int [] cloudSpeed;
 
 Gif walkingLeftLoop;
 
-NoiseyLine [] noises = new NoiseyLine[80];
+NoiseyLine [] noises = new NoiseyLine[30];
 color[] noisescolors = new color[noises.length];
 
 
@@ -62,7 +62,7 @@ void setup(){
 		//new noiseyline(start, end, y, tall, steps)
 		noisescolors[i] =  color((int)random(100)+100,random(255));
 		// noises[i] = new NoiseyLine(width - 2*(int)random(width),width +100, (int)(height/4+ random(1,height/2)),(int)random(1,20),(int)random(7,14));
-		noises[i] = new NoiseyLine(width/2,width, (int) random(height),(int)random(1,20),(int)random(2,300));
+		noises[i] = new NoiseyLine(width/2,width, 200 +(int) random(505),(int)random(1,20),(int)random(2,300));
 	
 	}
 
@@ -79,7 +79,7 @@ void setup(){
 		int why = (i%4)+1;
 		cloudnames[i] = "cloud" + why + ".png";
 		clouds[i] = loadImage(cloudnames[i]);
-		cloudLocationX[i] =  (int) random(width);
+		cloudLocationX[i] =  (int)random(width);
 		cloudLocationY[i] =  (int)random(height/2);
 		cloudSpeed[i] = (int)random(4,20);
 		
@@ -135,7 +135,7 @@ void draw(){
 
 
 	for (int i = 0; i<400; i++){
-		image(grass[1], random(width), height - random(200));
+		image(grass[1], random(width+100)-100, height - random(200));
 	}
 
 	for(int i=0; i<noises.length/2; i++){
@@ -148,12 +148,21 @@ void draw(){
 
 	tint(90+random(100),100);
 
+	if (mouseX < width - (width/3)){
 	// tint(255);
-	image(walkingLeftLoop, width/4 , 175);
-	image(walkingLeftLoop, width/4 , 175);
-	image(walkingLeftLoop, width/4 , 175);
-	image(walkingLeftLoop, width/4 , 175);
-	image(walkingLeftLoop, width/4 , 175);
+		image(walkingLeftLoop, mouseX , 175);
+		image(walkingLeftLoop, mouseX , 175);
+		image(walkingLeftLoop, mouseX  , 175);
+		// image(walkingLeftLoop, mouseX , 175);
+		// image(walkingLeftLoop, mouseX , 175);
+	}	else {
+		image(walkingLeftLoop, width - (width/3) , 175);
+		image(walkingLeftLoop, width - (width/3) , 175);
+		image(walkingLeftLoop, width - (width/3)  , 175);
+		// image(walkingLeftLoop, width - (width/3) , 175);
+		// image(walkingLeftLoop, width - (width/3) , 175);
+
+	}
 
 	// tint(255);
 	for(int i=noises.length/2; i<noises.length; i++){
@@ -166,8 +175,8 @@ void draw(){
 
 	walkingLeftLoop.play();
 	// walkRight.display(width/2, height/2);
-	for (int i = 0; i<100; i++){
-		image(grass[1], (int)random(width), height - random(height/4));
+	for (int i = 0; i<85; i++){
+		image(grass[1], (int)random(width+100)-100, height - random(height/4));
 	}
 		
 }
@@ -193,10 +202,10 @@ void mousePressed(){
 
 	stroke(255);
 	strokeWeight(5);
-	line(571,279,1126 ,108 + random(300));
-	line(571,279,1126 ,108 + random(300));
-	line(571,279,1126 ,108 + random(300));
-	line(571,279,1126 ,108 + random(300));
+	line(mouseX + 262 ,279,1126 ,108 + random(300));
+	line(mouseX + 262 ,279,1126 ,108 + random(300));
+	line(mouseX + 262 ,279,1126 ,108 + random(300));
+	line(mouseX + 262 ,279,1126 ,108 + random(300));
 
 
 	println("MouseX: " + mouseX);
@@ -231,7 +240,7 @@ class NoiseyLine{
 			noStroke();
 			// ellipse(x+random(-100, 100), y + random(-100, 100), 5, 5);
 		}
-		lastX = x;
+		lastX = x+ (int)random(400);
 		lastY = y;
 
 		if ( x >=end){
@@ -240,7 +249,12 @@ class NoiseyLine{
 			lastY = -999;
 		}
 
-		x+=step;
+		if (mouseX < width - (width/3)){
+			x= (width - 150) - mouseX ;
+		} else {
+			x = (width -150) - (width -(width/3));
+		}
+		x +=  (int)random(step) ;
 
 
 	}
