@@ -23,6 +23,8 @@ PImage darkright;
 
 CloudOrbs cloudbubble;
 DeepBackground mybg;
+ShapeSection shaper;
+
 int fadeblack = 0;
 int s;
 
@@ -38,12 +40,23 @@ int crazyX = 0;
 int crazyY = 0;
 int granalpha = 0;
 int darkleftscroll;
+int tryitX = 0;
+int tryitY = 0;
+int whichpart = 1;
+int hexspeed=10;
+int lastrandobg = 1;
+int lastrandoshape =4;
+int tint1 = 80;
+int tint2 = 255;
 
 public void setup(){
 	size(displayWidth, displayHeight);
 	smooth();
+
 	cloudbubble = new CloudOrbs();
 	mybg = new DeepBackground();
+	shaper = new ShapeSection(); 
+
 	noCursor();
 
 	darkleft = loadImage("backgrounds/darkleft.png");
@@ -67,18 +80,11 @@ public boolean sketchFullScreen(){
 
 public void draw(){
 
-	// black fade to photo
-	if(fadeblack<255){
-		fadeBlack();
-		s = frameCount;
-		mybg.imageBackground(0);
-	}
-
-	if(frameCount - s < 10*frameRate  ){
+	if (whichpart ==1){
 		tint(200);
 		mybg.imageBackground(0);
 		cloudbubble.randomDraw(splitX1, height/2);
-	} else if (frameCount - s < 20*frameRate)  {
+	} else if (whichpart == 2) {
 		Ani x1 = new Ani(this, 1.5f, "splitX1", splitWidth1, Ani.ELASTIC_OUT);
 		Ani x2 = new Ani(this, 1.5f, "splitX2", splitWidth2, Ani.ELASTIC_OUT );
 
@@ -91,52 +97,72 @@ public void draw(){
 			crazyY++;
 		}
 
-	} else {
-		
+	} else if (whichpart == 3) {
+		tint(200);
+		mybg.imageBackground(0);
+		cloudbubble.massOrbs(width/2, height/2, width/3, height/2, prob);
 
+	} else if (whichpart ==4) {
 		if (granalpha<255){
+			granalpha++;
+		} 
+
 			tint(200);
 			mybg.imageBackground(0);
 			mybg.granulate(0,granalpha);
 			cloudbubble.massOrbs(width/2, height/2, width/3, height/2, prob);
-			granalpha++;
-
-		} else {
-
-			granalpha = 4444;
-
-			tint(200);
-			mybg.granulate(0,granalpha);
-			cloudbubble.massOrbs(width/2, height/2, width/3, height/2, prob);
-		}
-
 		if (prob > 0.2f){
 			prob -= 0.002f;
 		}
- }
+	} else if (whichpart == 5) {
+		granalpha = 4444;
 
- 	if(darkleftscroll < width/2){
- 		tint(255);
- 		image(darkleft, darkleftscroll+=10, 0);
- 		image(darkright,width + (width - -darkleftscroll), 0);
+		tint(200);
+		mybg.granulate(0,granalpha);
+		cloudbubble.massOrbs(width/2, height/2, width/3, height/2, prob);
+	} else if (whichpart == 6) {
+		if (frameCount% (1+(int)(mouseX/(width/10)))==0){
+			tint(tint1);
+			mybg.imageBackground(2);
+			tint(tint2);
+			shaper.grid(3);
+		}
+	} else if (whichpart == 7) {
+		if (frameCount% (1+(int)(mouseX/(width/10)))==0){
+			tint(tint1);
+			mybg.imageBackground(1);
+			tint(tint2);
+			shaper.grid(2);
+		}
+	} else if (whichpart == 8) {
+		if (frameCount% (1+(int)(mouseX/(width/10)))==0){
+			tint(tint2);
+			mybg.imageBackground(3);
+			tint(tint1);
+			shaper.grid(1);
+		}
+	} else if (whichpart == 9) {
+		if (random(0, 1)> 0.7f){
+			int z = tint1;
+			tint1 = tint2;
+			tint2 = z;
+			lastrandobg = (int)ceil(random(4));
+			lastrandoshape = (int)ceil(random(3));
+		} 
 
- 		if (darkleftscroll >= 0){
- 			fill(0);
- 			rect(0, 0, darkleftscroll, height);
- 			rect(width,0,width - -darkleftscroll, height);
- 		}
- 	}
-	// tint(200);
-	// mybg.granulate(0);
-	// if (frameCount%20 == 0){
-	// mybg.imageBackground((int) random(5));
+		if (frameCount% (1+(int)(mouseX/(width/10)))==0){
+			tint(tint1,tint1);
+			mybg.imageBackground(lastrandobg);
+			tint(tint2,tint1);
+			shaper.grid(lastrandoshape);
+		}
+	}
+ 		
+	saveFrame("saved/finalproj-####.tif");
 
-	// cloudbubble.massOrbs(width/2, height/2, width/3, height/2);
-	
-	// black fade to photo
-	// if(fadeblack<255){
-	// 	fadeBlack();
-	// }
+	if(fadeblack<255){
+		fadeBlack();
+	}
 }
 
 public void fadeBlack(){
@@ -147,7 +173,30 @@ public void fadeBlack(){
 
 }
 
-
+public void keyPressed(){
+	if (key == '1'){
+		whichpart = 1;
+	} else if (key == '2') {
+		whichpart = 2;
+	} else if (key == '3') {
+		whichpart = 3;
+		println("part3");
+	} else if (key == '4') {
+		whichpart = 4;
+	} else if (key == '5') {
+		whichpart = 5;
+	} else if (key == '6') {
+		whichpart = 6;
+	} else if (key == '7') {
+		whichpart = 7;
+	} else if (key == '8' ) {
+		whichpart = 8;
+	} else if (key == '9') {
+		whichpart = 9;
+	} else if (key == '0') {
+		whichpart = 0; 
+	}
+}
 
 
 
@@ -263,6 +312,145 @@ class DeepBackground{
 
  }
 
+class ShapeSection{
+	int startX;
+	int endX;
+	int startY;
+	int endY;
+	int gridSizeX;
+	int gridSizeY;
+	int allowd;
+	int allowdY;
+
+	PImage[] hexa;
+	PImage[] circles;
+	PImage[] square;
+	PImage[] trap;
+	PImage[] trapu;
+
+	ShapeSection(){
+		hexa = new PImage[5];
+		for (int i = 0; i<hexa.length; i++){
+			 hexa[i] = loadImage("hex/hex" + i + ".png");
+		}
+
+		circles = new PImage[9];
+		for (int i = 0; i<circles.length; i++){
+			 circles[i] = loadImage("circles/circle" + i + ".png");
+		}
+
+		square = new PImage[10];
+		for (int i = 0; i<square.length; i++){
+			 square[i] = loadImage("squares/square" + i + ".png");
+		}
+
+		trap = new PImage[5];
+		trapu = new PImage[5];
+		for (int i = 0; i<trap.length; i++){
+			trap[i] = loadImage("trap/trap" + i + ".png");
+			trapu[i] = loadImage("trap/trapu" + i + ".png");
+		}
+	
+	}
+
+	public void grid(int shape){
+		switch (shape){
+			case 1:
+				gridSizeX = width/10;
+				gridSizeY = height/5;
+
+				startX = 150;
+				endX = (width - square[1].width - 30);
+				startY = 50;
+				endY = (height-square[shape].height);
+
+				for (int gridY = startY; gridY<endY; gridY+= gridSizeY){
+					for (int gridX = startX; gridX<endX; gridX+= gridSizeX){
+						image(square[(int)random(100)%square.length], gridX, gridY);
+					}
+				}
+
+				break;
+
+			case 2:
+				gridSizeX = width/7;
+				gridSizeY = height/6;
+
+				startX = 200;
+				endX = (width - trap[1].width - 50);
+				startY = 150;
+				endY = (height-100-trap[1].height);
+
+				for (int gridY = startY; gridY<endY; gridY+= gridSizeY){
+					for (int gridX = startX; gridX<endX; gridX+= gridSizeX){
+						float choose = random(0, 1);
+						if (choose>0.5f){
+							image(trap[(int)random(100)%trap.length], gridX, gridY);
+						} else {
+							image(trapu[(int)random(	100)%trapu.length], gridX, gridY);	
+						}
+					}
+				}
+				break ;
+			case 3:
+				gridSizeX = width/5;
+				gridSizeY = height/3;
+
+				startX = 250;
+				endX = (width - 100 - hexa[1].width);
+				startY = 225;
+				endY = (height - 100 - hexa[1].height);
+
+				for (int gridY = startY; gridY<endY; gridY+= gridSizeY){
+					for (int gridX = startX; gridX<endX; gridX+= gridSizeX){
+						image(hexa[(int)random(100)%hexa.length], gridX, gridY);
+					}
+				}
+
+
+
+
+
+				// endX = (width - trap[1].
+
+
+			default :
+				
+			break;	
+		}
+	}
+
+
+	public void gridal(int shape, int allow, int allowy){
+		switch (shape){
+			case 1:
+				gridSizeX = width/10;
+				gridSizeY = height/5;
+				allowd= allow * gridSizeX;
+				allowdY = allowy * gridSizeY;
+				startX = 150;
+				endX = allowd%(width - square[1].height - 30);
+				startY = 50;
+				endY = allowdY%(height-square[shape].width);
+
+				println(allowd);
+
+			for (int gridY = startY; gridY<endY; gridY+= gridSizeY){
+				for (int gridX = startX; gridX<endX; gridX+= gridSizeX){
+					image(square[(int)random(100)%square.length], gridX, gridY);
+				}
+			}
+				break;
+			default :
+				
+			break;	
+		}
+
+
+	}
+
+
+}
 class Orb{
 	PImage orb;
 	int x;
