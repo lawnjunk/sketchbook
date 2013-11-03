@@ -11,8 +11,6 @@ int [] cloudLocationX;
 int [] cloudLocationY;
 int [] cloudSpeed;
 
-
-
 Gif walkingLeftLoop;
 
 NoiseyLine [] noises = new NoiseyLine[30];
